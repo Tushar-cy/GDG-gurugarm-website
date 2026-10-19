@@ -1,0 +1,87 @@
+server:
+  port: 3001
+  address: 0.0.0.0
+
+spring:
+  application:
+    name: gdg-backend
+  
+  # --- DATABASE (PostgreSQL Production) ---
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/gdg_db}
+    username: ${DATABASE_USERNAME:postgres}
+    password: ${DATABASE_PASSWORD:password}
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update # 'validate' in production is safer
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  
+  # --- H2 Database (Local Dev Profile) ---
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev} # Default to 'dev' profile
+    
+  # --- H2 Console (for 'dev' profile) ---
+  h2:
+    console:
+      enabled: false # Will be enabled by 'dev' profile
+      path: /h2-console
+      
+  # --- File Uploads (Multipart) ---
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 50MB
+      enabled: true
+      
+  # --- Spring Security ---
+  security:
+    user:
+      name: ${ADMIN_USER:admin}
+      password: ${ADMIN_PASSWORD:admin-password-please-change} # CHANGE THIS
+      roles: ADMIN
+
+# --- Management Endpoints (Health) ---
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+
+# --- Logging Configuration (Cleaned) ---
+logging:
+  level:
+    com.gdg.backend: INFO
+    org.springframework.data.jpa: INFO
+    org.hibernate.SQL: DEBUG # Set to INFO in prod
+    org.springframework.web: INFO
+    org.springframework.security: INFO
+    root: INFO
+  file:
+    name: ./logs/gdg-backend.log
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 7
+      total-size-cap: 100MB
+
+# --- NEW: S3 Configuration ---
+aws:
+  s3:
+    bucket-name: ${S3_BUCKET_NAME:your-gdg-bucket-name}
+    region: ${S3_REGION:your-s3-region} # e.g., us-east-1
+    # For MinIO (local S3) or other compatible services:
+    # endpoint-override: ${S3_ENDPOINT_OVERRIDE:http://localhost:9000}
+    # access-key-id: ${S3_ACCESS_KEY:minioadmin}
+    # secret-access-key: ${S3_SECRET_KEY:minioadmin}

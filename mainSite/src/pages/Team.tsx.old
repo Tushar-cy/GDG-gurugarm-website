@@ -1,0 +1,373 @@
+import React, { useMemo, useState } from 'react';
+import {
+  FaLinkedin,
+  FaTwitter,
+  FaGithub,
+  FaGlobe,
+  FaUsers,
+  FaCrown,
+  FaCode,
+  FaRocket,
+  FaGraduationCap,
+  FaHeart,
+  FaFilter,
+} from 'react-icons/fa';
+
+interface TeamMember {
+  id: string;
+  name: string;
+  role: string;
+  description: string;
+  avatar: string;
+  socialLinks?: {
+    linkedin?: string;
+    twitter?: string;
+    github?: string;
+    website?: string;
+  };
+  tags?: string[];
+  roleIcon?: any;
+  isLeader?: boolean;
+}
+
+const teamMembers: TeamMember[] = [
+  {
+    id: '1',
+    name: 'Subham Singh',
+    role: 'Tech Lead',
+    description:
+      'Leading technical initiatives and driving innovation at GDG Gurugram University. Passionate about creating impactful tech solutions.',
+    avatar: 'https://ui-avatars.com/api/?name=Subham+Singh&background=2563eb&color=fff&size=200',
+    socialLinks: {
+      linkedin: 'https://linkedin.com/in/subham-singh',
+      twitter: 'https://twitter.com/subham_singh',
+      github: 'https://github.com/subham-singh',
+    },
+    tags: ['Full Stack', 'React', 'Node.js'],
+    roleIcon: FaCode,
+    isLeader: true,
+  },
+  {
+    id: '2',
+    name: 'Keshav',
+    role: 'GDG Head',
+    description:
+      'Heading the GDG community and organizing amazing tech events. Dedicated to fostering a vibrant developer ecosystem.',
+    avatar: 'https://ui-avatars.com/api/?name=Keshav&background=8b5cf6&color=fff&size=200',
+    socialLinks: {
+      linkedin: 'https://linkedin.com/in/keshav',
+      twitter: 'https://twitter.com/keshav',
+      github: 'https://github.com/keshav',
+    },
+    tags: ['Community', 'Leadership', 'Events'],
+    roleIcon: FaCrown,
+    isLeader: true,
+  },
+  {
+    id: '3',
+    name: 'Priya Sharma',
+    role: 'Event Coordinator',
+    description:
+      'Coordinating workshops, hackathons, and tech talks. Making sure every event is a memorable experience.',
+    avatar: 'https://ui-avatars.com/api/?name=Priya+Sharma&background=ec4899&color=fff&size=200',
+    socialLinks: {
+      linkedin: 'https://linkedin.com/in/priya-sharma',
+      twitter: 'https://twitter.com/priya_sharma',
+    },
+    tags: ['Events', 'Workshops', 'Coordination'],
+    roleIcon: FaRocket,
+  },
+  {
+    id: '4',
+    name: 'Rahul Kumar',
+    role: 'Technical Mentor',
+    description:
+      'Mentoring students in various technologies. Expert in AI/ML and passionate about knowledge sharing.',
+    avatar: 'https://ui-avatars.com/api/?name=Rahul+Kumar&background=10b981&color=fff&size=200',
+    socialLinks: {
+      linkedin: 'https://linkedin.com/in/rahul-kumar',
+      github: 'https://github.com/rahul-kumar',
+    },
+    tags: ['Mentoring', 'Python', 'AI/ML'],
+    roleIcon: FaGraduationCap,
+  },
+  {
+    id: '5',
+    name: 'Anjali Patel',
+    role: 'Community Manager',
+    description:
+      'Building and nurturing our developer community. Focused on creating inclusive spaces and fostering collaboration.',
+    avatar: 'https://ui-avatars.com/api/?name=Anjali+Patel&background=f59e0b&color=fff&size=200',
+    socialLinks: {
+      linkedin: 'https://linkedin.com/in/anjali-patel',
+      twitter: 'https://twitter.com/anjali_patel',
+    },
+    tags: ['Community', 'Management', 'Outreach'],
+    roleIcon: FaUsers,
+  },
+  {
+    id: '6',
+    name: 'Arjun Mehta',
+    role: 'Content Creator',
+    description:
+      'Creating engaging technical content and managing our social media presence. Spreading awareness about GDG activities.',
+    avatar: 'https://ui-avatars.com/api/?name=Arjun+Mehta&background=ef4444&color=fff&size=200',
+    socialLinks: {
+      linkedin: 'https://linkedin.com/in/arjun-mehta',
+      twitter: 'https://twitter.com/arjun-mehta',
+      github: 'https://github.com/arjun-mehta',
+    },
+    tags: ['Content', 'Social Media', 'Design'],
+    roleIcon: FaHeart,
+  },
+];
+
+type TeamFilter = 'all' | 'leadership' | 'technical' | 'community';
+
+const Team = () => {
+  const [filter, setFilter] = useState<TeamFilter>('all');
+
+  const filteredMembers = useMemo(() => {
+    switch (filter) {
+      case 'leadership':
+        return teamMembers.filter((member) => member.isLeader);
+      case 'technical':
+        return teamMembers.filter((member) =>
+          member.tags?.some((tag) => ['Full Stack', 'React', 'Node.js', 'Python', 'AI/ML'].includes(tag)),
+        );
+      case 'community':
+        return teamMembers.filter((member) =>
+          member.tags?.some((tag) => ['Community', 'Events', 'Management', 'Outreach'].includes(tag)),
+        );
+      default:
+        return teamMembers;
+    }
+  }, [filter]);
+
+  const stats = [
+    { label: 'Team Members', value: '6+', icon: FaUsers },
+    { label: 'Events Organized', value: '50+', icon: FaRocket },
+    { label: 'Community Members', value: '500+', icon: FaHeart },
+    { label: 'Technologies', value: '15+', icon: FaCode },
+  ];
+
+  return (
+    <div className="min-h-screen bg-white">
+      {/* Hero */}
+      <section className="bg-gradient-to-br from-blue-50 via-white to-purple-50 relative overflow-hidden">
+        {/* Decorative orbs */}
+        <div className="absolute top-20 right-10 w-72 h-72 bg-blue-200/20 rounded-full blur-3xl animate-float-slow"></div>
+        <div className="absolute bottom-10 left-10 w-96 h-96 bg-purple-200/20 rounded-full blur-3xl animate-float-medium"></div>
+        
+        <div className="max-w-[1400px] mx-auto px-8 py-20 lg:py-24 relative z-10">
+          <div className="text-center">
+            <div className="inline-block px-4 py-2 bg-purple-100/50 backdrop-blur-sm rounded-full text-purple-600 text-sm font-medium mb-6 animate-fade-in">
+              Our Team
+            </div>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+              Meet Our GDG Team
+            </h1>
+            <p className="mt-4 mx-auto max-w-2xl text-lg lg:text-xl text-gray-600 leading-relaxed animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+              Passionate developers, community builders, and tech enthusiasts working together to create an amazing
+              developer ecosystem at Gurugram University.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats */}
+      <section className="py-16 bg-white border-y border-gray-200">
+        <div className="max-w-[1400px] mx-auto px-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            {stats.map((stat, index) => (
+              <div
+                key={stat.label}
+                className="group relative bg-white/70 backdrop-blur-lg border border-gray-200 rounded-3xl p-8 text-center hover:border-blue-400 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 animate-scale-in"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                {/* Grid pattern */}
+                <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
+                
+                <div className="relative z-10">
+                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/30 group-hover:scale-110 transition-transform duration-300">
+                    <stat.icon size={28} />
+                  </div>
+                  <div className="text-3xl font-bold text-gray-900 mb-2">{stat.value}</div>
+                  <div className="text-gray-600 text-sm font-medium">{stat.label}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Filter */}
+      <section className="bg-white border-b border-gray-200">
+        <div className="max-w-[1400px] mx-auto px-8 py-10">
+          <div className="bg-white/60 backdrop-blur-md border border-gray-200 rounded-3xl p-8 animate-scale-in">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                <FaFilter size={18} className="text-purple-600" />
+              </div>
+              <div className="text-gray-900 text-lg font-bold">Filter Team Members</div>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              {([
+                { label: 'All Members', value: 'all' },
+                { label: 'Leadership', value: 'leadership' },
+                { label: 'Technical', value: 'technical' },
+                { label: 'Community', value: 'community' },
+              ] as { label: string; value: TeamFilter }[]).map((tab) => (
+                <button
+                  key={tab.value}
+                  onClick={() => setFilter(tab.value)}
+                  className={
+                    `px-6 py-3 rounded-full text-sm font-semibold transition-all ` +
+                    (filter === tab.value
+                      ? 'bg-purple-600 text-white shadow-lg'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200')
+                  }
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Team Grid */}
+      <section className="py-20 bg-white">
+        <div className="max-w-[1400px] mx-auto px-8">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            {filteredMembers.map((member, index) => {
+              const IconComponent = member.roleIcon || FaUsers;
+
+              return (
+                <div
+                  key={member.id}
+                  className="group relative bg-white/70 backdrop-blur-lg border border-gray-200 rounded-3xl overflow-hidden hover:border-blue-400 hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 animate-fade-in-up flex flex-col"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  {/* Avatar Section */}
+                  <div className="relative overflow-hidden bg-gradient-to-br from-gray-100 to-gray-50 aspect-square">
+                    <img
+                      src={member.avatar}
+                      alt={member.name}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700 ease-out"
+                    />
+                    
+                    {/* Gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-900/20 to-transparent"></div>
+                    
+                    {/* Grid pattern overlay */}
+                    <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle, #000 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
+                    
+                    {/* Leader badge */}
+                    {member.isLeader && (
+                      <div className="absolute top-4 right-4 z-10">
+                        <div className="px-4 py-2 rounded-full backdrop-blur-md bg-yellow-500/95 text-white text-xs font-bold shadow-lg flex items-center gap-2">
+                          <FaCrown size={12} />
+                          Leader
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Role icon */}
+                    <div className="absolute bottom-4 left-4 w-16 h-16 bg-white rounded-xl p-3 shadow-lg z-10 flex items-center justify-center">
+                      <IconComponent className="text-blue-600" size={28} />
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-8 flex flex-col gap-4 flex-1 relative">
+                    {/* Grid pattern */}
+                    <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
+                    
+                    <div className="relative z-10">
+                      <div className="mb-2">
+                        <div className="px-4 py-1.5 inline-block rounded-full bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 text-blue-700 text-xs font-bold">
+                          {member.role}
+                        </div>
+                      </div>
+
+                      <h3 className="text-2xl font-bold text-gray-900 leading-tight group-hover:text-blue-600 transition-colors duration-300 mb-3">
+                        {member.name}
+                      </h3>
+
+                      <p className="text-gray-600 leading-relaxed text-[15px] mb-4 line-clamp-3">
+                        {member.description}
+                      </p>
+
+                      {/* Tags */}
+                      {member.tags && member.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mb-4">
+                          {member.tags.slice(0, 3).map((tag) => (
+                            <span
+                              key={tag}
+                              className="px-3 py-1 rounded-full bg-gray-100 text-gray-700 text-xs font-medium"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Social Links */}
+                      {member.socialLinks && (
+                        <div className="flex gap-3 pt-4 border-t border-gray-100">
+                          {member.socialLinks.linkedin && (
+                            <a
+                              href={member.socialLinks.linkedin}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600 hover:bg-blue-600 hover:text-white transition-all duration-300 hover:scale-110"
+                            >
+                              <FaLinkedin size={18} />
+                            </a>
+                          )}
+                          {member.socialLinks.twitter && (
+                            <a
+                              href={member.socialLinks.twitter}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="w-10 h-10 rounded-lg bg-sky-50 flex items-center justify-center text-sky-600 hover:bg-sky-600 hover:text-white transition-all duration-300 hover:scale-110"
+                            >
+                              <FaTwitter size={18} />
+                            </a>
+                          )}
+                          {member.socialLinks.github && (
+                            <a
+                              href={member.socialLinks.github}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-700 hover:bg-gray-900 hover:text-white transition-all duration-300 hover:scale-110"
+                            >
+                              <FaGithub size={18} />
+                            </a>
+                          )}
+                          {member.socialLinks.website && (
+                            <a
+                              href={member.socialLinks.website}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center text-purple-600 hover:bg-purple-600 hover:text-white transition-all duration-300 hover:scale-110"
+                            >
+                              <FaGlobe size={18} />
+                            </a>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default Team;

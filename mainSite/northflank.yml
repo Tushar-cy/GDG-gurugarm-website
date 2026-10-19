@@ -1,0 +1,61 @@
+version: 1
+name: gdg-mainsite
+type: service
+build:
+  dockerfile: Dockerfile
+  context: .
+deploy:
+  replicas: 1
+  resources:
+    cpu: 2000m
+    memory: 4Gi
+  env:
+    - name: ROOT_PASSWORD
+      value: ${ROOT_PASSWORD}
+    - name: MONGODB_URI
+      value: ${MONGODB_URI}
+    - name: JWT_SECRET
+      value: ${JWT_SECRET}
+    - name: NODE_ENV
+      value: production
+  ports:
+    - port: 22
+      protocol: tcp
+      public: true
+    - port: 80
+      protocol: http
+      public: true
+    - port: 443
+      protocol: tcp
+      public: true
+    - port: 3000
+      protocol: http
+      public: false
+    - port: 3001
+      protocol: http
+      public: false
+  volumes:
+    - name: app-data
+      path: /app
+      size: 20Gi
+    - name: root-data
+      path: /root
+      size: 10Gi
+    - name: etc-data
+      path: /etc
+      size: 5Gi
+    - name: nginx-logs
+      path: /var/log/nginx
+      size: 2Gi
+  security:
+    allowPrivilegedContainers: true
+    capabilities:
+      - ALL
+  health:
+    path: /
+    port: 80
+    initialDelay: 30
+    period: 10
+    timeout: 5
+    successThreshold: 1
+    failureThreshold: 3 

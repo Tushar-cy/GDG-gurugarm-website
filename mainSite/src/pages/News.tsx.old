@@ -1,0 +1,479 @@
+import React, { useState, useMemo } from 'react';
+import { FaSearch, FaCalendarAlt, FaUser, FaClock, FaTag, FaStar, FaFilter } from 'react-icons/fa';
+
+interface NewsArticle {
+  id: number;
+  title: string;
+  content: string;
+  excerpt: string;
+  image: string;
+  category: string;
+  author: string;
+  publishedDate: string;
+  isFeatured: boolean;
+  tags: string;
+  readTime: number;
+}
+
+const mockNews: NewsArticle[] = [
+  {
+    id: 1,
+    title: 'Google I/O 2025: Key Highlights and Announcements',
+    excerpt: 'Discover the latest innovations and product launches from Google I/O 2025, including new AI features and developer tools.',
+    content: 'Full article content here...',
+    image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800',
+    category: 'Tech News',
+    author: 'Subham Singh',
+    publishedDate: '2025-10-03T10:00:00',
+    isFeatured: true,
+    tags: 'Google, AI, Developer Tools',
+    readTime: 5,
+  },
+  {
+    id: 2,
+    title: 'GDG DevFest 2025: Registration Now Open',
+    excerpt: 'Join us for the biggest developer festival of the year. Register now for workshops, talks, and networking opportunities.',
+    content: 'Full article content here...',
+    image: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=800',
+    category: 'Events',
+    author: 'Keshav',
+    publishedDate: '2025-10-02T14:30:00',
+    isFeatured: true,
+    tags: 'DevFest, Events, Community',
+    readTime: 3,
+  },
+  {
+    id: 3,
+    title: 'Building Scalable Apps with Firebase and Cloud Functions',
+    excerpt: 'Learn how to leverage Firebase and Cloud Functions to build scalable, serverless applications.',
+    content: 'Full article content here...',
+    image: 'https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800',
+    category: 'Tutorials',
+    author: 'Priya Sharma',
+    publishedDate: '2025-10-01T09:15:00',
+    isFeatured: false,
+    tags: 'Firebase, Cloud, Tutorial',
+    readTime: 8,
+  },
+  {
+    id: 4,
+    title: 'Community Spotlight: Success Stories from Our Members',
+    excerpt: 'Celebrating the achievements of our community members who have made significant contributions to the tech ecosystem.',
+    content: 'Full article content here...',
+    image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800',
+    category: 'Community',
+    author: 'Anjali Patel',
+    publishedDate: '2025-09-30T16:45:00',
+    isFeatured: false,
+    tags: 'Community, Success Stories',
+    readTime: 4,
+  },
+  {
+    id: 5,
+    title: 'Introduction to Machine Learning with TensorFlow',
+    excerpt: 'A comprehensive guide to getting started with machine learning using TensorFlow and Python.',
+    content: 'Full article content here...',
+    image: 'https://images.unsplash.com/photo-1555255707-c07966088b7b?w=800',
+    category: 'Tutorials',
+    author: 'Rahul Kumar',
+    publishedDate: '2025-09-29T11:20:00',
+    isFeatured: false,
+    tags: 'ML, TensorFlow, Python',
+    readTime: 10,
+  },
+  {
+    id: 6,
+    title: 'Android 15: What\'s New for Developers',
+    excerpt: 'Explore the new features and improvements in Android 15 that will enhance your app development experience.',
+    content: 'Full article content here...',
+    image: 'https://images.unsplash.com/photo-1607252650355-f7fd0460ccdb?w=800',
+    category: 'Tech News',
+    author: 'Arjun Mehta',
+    publishedDate: '2025-09-28T13:00:00',
+    isFeatured: false,
+    tags: 'Android, Mobile Development',
+    readTime: 6,
+  },
+];
+
+type CategoryFilter = 'all' | 'Tech News' | 'Events' | 'Tutorials' | 'Community';
+
+const News = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>('all');
+  const [selectedArticle, setSelectedArticle] = useState<NewsArticle | null>(null);
+
+  // Prevent body scroll when modal is open
+  React.useEffect(() => {
+    if (selectedArticle) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [selectedArticle]);
+
+  const filteredArticles = useMemo(() => {
+    let filtered = mockNews;
+
+    if (categoryFilter !== 'all') {
+      filtered = filtered.filter((article) => article.category === categoryFilter);
+    }
+
+    if (searchQuery) {
+      filtered = filtered.filter(
+        (article) =>
+          article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          article.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          article.tags.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    return filtered;
+  }, [searchQuery, categoryFilter]);
+
+  const featuredArticles = mockNews.filter((article) => article.isFeatured);
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  };
+
+  return (
+    <div className="min-h-screen bg-white">
+      {/* Hero */}
+      <section className="bg-gradient-to-br from-blue-50 via-white to-purple-50 relative overflow-hidden">
+        {/* Decorative orbs */}
+        <div className="absolute top-20 right-10 w-72 h-72 bg-blue-200/20 rounded-full blur-3xl animate-float-slow"></div>
+        <div className="absolute bottom-10 left-10 w-96 h-96 bg-purple-200/20 rounded-full blur-3xl animate-float-medium"></div>
+
+        <div className="max-w-[1400px] mx-auto px-8 py-20 lg:py-24 relative z-10">
+          <div className="text-center">
+            <div className="inline-block px-4 py-2 bg-blue-100/50 backdrop-blur-sm rounded-full text-blue-600 text-sm font-medium mb-6 animate-fade-in">
+              News & Updates
+            </div>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+              Stay Updated with GDG
+            </h1>
+            <p className="mt-4 mx-auto max-w-2xl text-lg lg:text-xl text-gray-600 leading-relaxed animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+              Latest news, articles, and updates from the Google Developer Group community at Gurugram University.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Search & Filter */}
+      <section className="bg-white border-b border-gray-200">
+        <div className="max-w-[1400px] mx-auto px-8 py-10">
+          <div className="bg-white/60 backdrop-blur-md border border-gray-200 rounded-3xl p-8 animate-scale-in">
+            {/* Search */}
+            <div className="mb-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+                  <FaSearch size={18} className="text-blue-600" />
+                </div>
+                <div className="text-gray-900 text-lg font-bold">Search Articles</div>
+              </div>
+              <div className="relative">
+                <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                <input
+                  type="text"
+                  placeholder="Search by title, content, or tags..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-12 pr-4 py-4 rounded-2xl border border-gray-200 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all text-gray-900 placeholder-gray-400"
+                />
+              </div>
+            </div>
+
+            {/* Category Filter */}
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                  <FaFilter size={18} className="text-purple-600" />
+                </div>
+                <div className="text-gray-900 text-lg font-bold">Filter by Category</div>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                {(['all', 'Tech News', 'Events', 'Tutorials', 'Community'] as CategoryFilter[]).map((category) => (
+                  <button
+                    key={category}
+                    onClick={() => setCategoryFilter(category)}
+                    className={
+                      `px-6 py-3 rounded-full text-sm font-semibold transition-all ` +
+                      (categoryFilter === category
+                        ? 'bg-blue-600 text-white shadow-lg'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200')
+                    }
+                  >
+                    {category === 'all' ? 'All Articles' : category}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Articles */}
+      {categoryFilter === 'all' && !searchQuery && featuredArticles.length > 0 && (
+        <section className="py-16 bg-gradient-to-b from-white via-blue-50/20 to-white border-b border-gray-200">
+          <div className="max-w-[1400px] mx-auto px-8">
+            <div className="flex items-center gap-3 mb-8">
+              <div className="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center">
+                <FaStar size={20} className="text-yellow-600" />
+              </div>
+              <h2 className="text-3xl font-bold text-gray-900">Featured Articles</h2>
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {featuredArticles.map((article, index) => (
+                <div
+                  key={article.id}
+                  className="group relative bg-white/70 backdrop-blur-lg border border-gray-200 rounded-3xl overflow-hidden hover:border-yellow-400 hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 cursor-pointer animate-fade-in-up"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                  onClick={() => setSelectedArticle(article)}
+                >
+                  {/* Image */}
+                  <div className="relative overflow-hidden aspect-[16/9]">
+                    <img
+                      src={article.image}
+                      alt={article.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700 ease-out"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-900/20 to-transparent"></div>
+                    <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle, #000 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
+                    
+                    {/* Featured badge */}
+                    <div className="absolute top-4 right-4 z-10">
+                      <div className="px-4 py-2 rounded-full backdrop-blur-md bg-yellow-500/95 text-white text-xs font-bold shadow-lg flex items-center gap-2">
+                        <FaStar size={12} />
+                        Featured
+                      </div>
+                    </div>
+
+                    {/* Category badge */}
+                    <div className="absolute bottom-4 left-4 z-10">
+                      <div className="px-4 py-2 rounded-full backdrop-blur-md bg-white/90 text-gray-900 text-xs font-bold shadow-lg">
+                        {article.category}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-8 relative">
+                    <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
+                    
+                    <div className="relative z-10">
+                      <h3 className="text-2xl font-bold text-gray-900 leading-tight group-hover:text-blue-600 transition-colors duration-300 mb-4">
+                        {article.title}
+                      </h3>
+                      <p className="text-gray-600 leading-relaxed mb-6">{article.excerpt}</p>
+
+                      {/* Meta */}
+                      <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
+                            <FaUser size={14} className="text-blue-600" />
+                          </div>
+                          <span>{article.author}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center">
+                            <FaCalendarAlt size={14} className="text-purple-600" />
+                          </div>
+                          <span>{formatDate(article.publishedDate)}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center">
+                            <FaClock size={14} className="text-green-600" />
+                          </div>
+                          <span>{article.readTime} min read</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* All Articles */}
+      <section className="py-20 bg-white">
+        <div className="max-w-[1400px] mx-auto px-8">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-3xl font-bold text-gray-900">
+              {categoryFilter === 'all' ? 'All Articles' : categoryFilter}
+            </h2>
+            <div className="text-gray-600 text-sm">
+              {filteredArticles.length} {filteredArticles.length === 1 ? 'article' : 'articles'}
+            </div>
+          </div>
+
+          {filteredArticles.length === 0 ? (
+            <div className="text-center py-20">
+              <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <FaSearch size={32} className="text-gray-400" />
+              </div>
+              <p className="text-gray-600 text-lg">No articles found matching your criteria.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredArticles.map((article, index) => (
+                <div
+                  key={article.id}
+                  className="group relative bg-white/70 backdrop-blur-lg border border-gray-200 rounded-3xl overflow-hidden hover:border-blue-400 hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 cursor-pointer animate-fade-in-up flex flex-col"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                  onClick={() => setSelectedArticle(article)}
+                >
+                  {/* Image */}
+                  <div className="relative overflow-hidden aspect-[16/9]">
+                    <img
+                      src={article.image}
+                      alt={article.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700 ease-out"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-900/20 to-transparent"></div>
+                    <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle, #000 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
+                    
+                    {/* Category badge */}
+                    <div className="absolute top-4 left-4 z-10">
+                      <div className="px-4 py-2 rounded-full backdrop-blur-md bg-white/90 text-gray-900 text-xs font-bold shadow-lg">
+                        {article.category}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-6 flex-1 flex flex-col relative">
+                    <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
+                    
+                    <div className="relative z-10 flex-1 flex flex-col">
+                      <h3 className="text-xl font-bold text-gray-900 leading-tight group-hover:text-blue-600 transition-colors duration-300 mb-3 line-clamp-2">
+                        {article.title}
+                      </h3>
+                      <p className="text-gray-600 leading-relaxed text-sm mb-4 line-clamp-3 flex-1">{article.excerpt}</p>
+
+                      {/* Meta */}
+                      <div className="flex flex-wrap items-center gap-3 text-xs text-gray-500 pt-4 border-t border-gray-100">
+                        <div className="flex items-center gap-1.5">
+                          <FaUser size={12} className="text-blue-600" />
+                          <span>{article.author}</span>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          <FaClock size={12} className="text-green-600" />
+                          <span>{article.readTime} min</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Article Modal */}
+      {selectedArticle && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in overflow-hidden" onClick={() => setSelectedArticle(null)}>
+          <div className="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto animate-scale-in scrollbar-hide" onClick={(e) => e.stopPropagation()}>
+            {/* Image */}
+            <div className="relative overflow-hidden aspect-[21/9]">
+              <img
+                src={selectedArticle.image}
+                alt={selectedArticle.title}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-900/20 to-transparent"></div>
+              
+              {/* Close button */}
+              <button
+                onClick={() => setSelectedArticle(null)}
+                className="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center hover:bg-white transition-all shadow-lg"
+              >
+                <FaSearch size={16} className="text-gray-900" />
+              </button>
+
+              {/* Category */}
+              <div className="absolute bottom-4 left-8">
+                <div className="px-4 py-2 rounded-full backdrop-blur-md bg-white/90 text-gray-900 text-sm font-bold shadow-lg">
+                  {selectedArticle.category}
+                </div>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="p-8 lg:p-12">
+              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6 leading-tight">
+                {selectedArticle.title}
+              </h2>
+
+              {/* Meta */}
+              <div className="flex flex-wrap items-center gap-6 mb-8 pb-8 border-b border-gray-200">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                    <FaUser size={16} className="text-blue-600" />
+                  </div>
+                  <div>
+                    <div className="text-xs text-gray-500">Author</div>
+                    <div className="text-sm font-semibold text-gray-900">{selectedArticle.author}</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
+                    <FaCalendarAlt size={16} className="text-purple-600" />
+                  </div>
+                  <div>
+                    <div className="text-xs text-gray-500">Published</div>
+                    <div className="text-sm font-semibold text-gray-900">{formatDate(selectedArticle.publishedDate)}</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+                    <FaClock size={16} className="text-green-600" />
+                  </div>
+                  <div>
+                    <div className="text-xs text-gray-500">Read Time</div>
+                    <div className="text-sm font-semibold text-gray-900">{selectedArticle.readTime} minutes</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Article content */}
+              <div className="prose prose-lg max-w-none">
+                <p className="text-xl text-gray-700 leading-relaxed mb-6">{selectedArticle.excerpt}</p>
+                <p className="text-gray-600 leading-relaxed">{selectedArticle.content}</p>
+              </div>
+
+              {/* Tags */}
+              {selectedArticle.tags && (
+                <div className="mt-8 pt-8 border-t border-gray-200">
+                  <div className="flex items-center gap-3 mb-4">
+                    <FaTag size={16} className="text-gray-400" />
+                    <span className="text-sm font-semibold text-gray-900">Tags</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedArticle.tags.split(',').map((tag, index) => (
+                      <span
+                        key={index}
+                        className="px-4 py-2 rounded-full bg-gray-100 text-gray-700 text-sm font-medium"
+                      >
+                        {tag.trim()}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default News;

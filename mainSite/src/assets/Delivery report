@@ -1,0 +1,13 @@
+Arrival-Date: Sun, 23 Mar 2025 04:42:04 +0000
+Final-Recipient: rfc822; undefined
+Action: failed
+Status: 5.0.0
+Diagnostic-Code: smtp; 550 301 Moved Permanently Error for edfbf21b7374ec2f@krypticbit.io
+Remote-MTA: dns; krypticbit.io
+Reporting-MTA: dns; mx1.forwardemail.net
+X-Report-Abuse-To: abuse@forwardemail.net
+X-Report-Abuse: abuse@forwardemail.net
+X-Complaints-To: abuse@forwardemail.net
+X-Forward-Email-Website: https://forwardemail.net
+X-Forward-Email-Version: 0.4.40
+X-Forward-Email-Sender: rfc822; mailer-daemon@forwardemail.net, mx1.forwardemail.net, 138.197.213.185

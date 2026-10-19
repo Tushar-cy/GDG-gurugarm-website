@@ -1,0 +1,189 @@
+# ===========================================
+# MONOREPO .GITIGNORE - Backend + MainSite
+# ===========================================
+
+# ===========================================
+# BACKEND (Spring Boot / Maven)
+# ===========================================
+
+# Maven build artifacts
+backend/target/
+backend/*.jar
+backend/*.war
+backend/*.ear
+backend/*.class
+
+# Maven wrapper
+backend/.mvn/
+backend/mvnw
+backend/mvnw.cmd
+backend/.mvn/wrapper/maven-wrapper.jar
+
+# Spring Boot specific
+backend/.gradle/
+backend/gradle/
+backend/gradlew
+backend/gradlew.bat
+backend/build/
+!backend/gradle/wrapper/gradle-wrapper.jar
+
+# Application logs
+backend/application*.log
+backend/spring.log
+backend/*.log
+
+# ===========================================
+# MAINSITE (Node.js / Vite / React)
+# ===========================================
+
+# Dependencies
+mainSite/node_modules/
+mainSite/npm-debug.log*
+mainSite/yarn-debug.log*
+mainSite/yarn-error.log*
+mainSite/pnpm-debug.log*
+mainSite/lerna-debug.log*
+
+# Build outputs
+mainSite/dist/
+mainSite/dist-ssr/
+mainSite/build/
+mainSite/out/
+mainSite/.next/
+mainSite/.nuxt/
+
+# Vite specific
+mainSite/.vite/
+mainSite/vite.config.js.timestamp-*
+mainSite/vite.config.ts.timestamp-*
+
+# TypeScript
+mainSite/*.tsbuildinfo
+
+# ===========================================
+# SHARED / GENERAL
+# ===========================================
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# nyc test coverage
+.nyc_output
+
+# Dependency directories
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+.parcel-cache
+
+# Storybook build outputs
+.out
+.storybook-out
+
+# Temporary folders
+tmp/
+temp/
+
+# IDE generated files
+.vscode/
+.idea/
+*.iml
+*.ipr
+*.iws
+.settings/
+.project
+.classpath
+.factorypath
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Docker
+.dockerignore
+
+# Deployment
+.vercel
+
+# Archives
+*.zip
+*.tar.gz
+*.rar
+
+# Sensitive credentials
+**/ADMIN_CREDENTIALS.md
+**/.env.*
+!**/.env.example
+**/credentials.properties
+
+# Generated server output
+mainSite/dist-server/
+
+# Local development data and configuration
+backend/uploads/
+backend/src/main/resources/application-dev.yml
+
+# Local database backups
+/backups/
+
+# Private keys and certificates
+*.pem
+*.key
+*.p12
+*.pfx
